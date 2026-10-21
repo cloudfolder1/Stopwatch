@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#000000" />
+  
+  <!-- Top-Left Outer Accent Arc -->
+  <path d="M 33.4 234.4 A 248 248 0 0 1 280.3 38" fill="none" stroke="#70c7f7" stroke-width="30" stroke-linecap="butt" />
+  
+  <!-- Main Clock Circle -->
+  <circle cx="276" cy="286" r="195" fill="none" stroke="#70c7f7" stroke-width="30" />
+  
+  <!-- Center Hub -->
+  <circle cx="276" cy="286" r="28" fill="#70c7f7" />
+  
+  <!-- Thick Hour Hand (Left) -->
+  <line x1="276" y1="286" x2="176" y2="253.5" stroke="#70c7f7" stroke-width="28" stroke-linecap="round" />
+  
+  <!-- Medium Minute Hand (Right) -->
+  <line x1="276" y1="286" x2="436" y2="246" stroke="#70c7f7" stroke-width="22" stroke-linecap="round" />
+  
+  <!-- Thin Second Hand (Top-Left) -->
+  <line x1="276" y1="286" x2="196" y2="147.4" stroke="#70c7f7" stroke-width="6" stroke-linecap="butt" />
+</svg>
