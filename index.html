@@ -340,6 +340,18 @@
       font-weight: 400;
       white-space: nowrap;
       min-width: 175px;
+      position: relative;
+    }
+
+    /* Day & Date Indicator alongside logs when day changes */
+    .session-day-date {
+      color: #a8cafa;
+      font-size: 1.3rem;
+      font-weight: 400;
+      white-space: nowrap;
+      position: absolute;
+      left: 100%;
+      margin-left: 16px;
     }
 
     @media (max-width: 620px) {
@@ -357,6 +369,11 @@
       }
       .session-time-range {
         padding-left: 34px;
+        font-size: 1.1rem;
+      }
+      .session-day-date {
+        position: static;
+        margin-left: 14px;
         font-size: 1.1rem;
       }
     }
@@ -428,6 +445,7 @@
       lastFlagTotalMs: 0,
       currentSessionStartClock: null,
       summedSeconds: 0,
+      lastLoggedDate: null,
       sessions: []
     };
 
@@ -468,6 +486,12 @@
       const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
       const ddd = days[now.getDay()];
       dateDisplayEl.textContent = `${dd}-${mm}-${yy} ${ddd}`;
+    }
+
+    // Format Day and Date for session log (e.g., Sunday 1, Tuesday 3)
+    function formatDayDate(dateObj) {
+      const daysFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return `${daysFull[dateObj.getDay()]} ${dateObj.getDate()}`;
     }
 
     // Format a start and end Date into 12-hour AM/PM range
@@ -536,6 +560,7 @@
             lastFlagTotalMs: Number(parsed.lastFlagTotalMs) || 0,
             currentSessionStartClock: parsed.currentSessionStartClock ? Number(parsed.currentSessionStartClock) : null,
             summedSeconds: Number(parsed.summedSeconds) || 0,
+            lastLoggedDate: parsed.lastLoggedDate || null,
             sessions: Array.isArray(parsed.sessions) ? parsed.sessions : []
           };
         }
@@ -617,6 +642,13 @@
         timeRangeEl.className = 'session-time-range';
         timeRangeEl.textContent = session.timeRange;
 
+        if (session.dayDate) {
+          const dayDateEl = document.createElement('span');
+          dayDateEl.className = 'session-day-date';
+          dayDateEl.textContent = session.dayDate;
+          timeRangeEl.appendChild(dayDateEl);
+        }
+
         row.appendChild(addBtn);
         row.appendChild(pill);
         row.appendChild(timeRangeEl);
@@ -664,11 +696,19 @@
         : new Date(now - sessionMs);
       const endClock = new Date(now);
 
+      const currentDayDate = formatDayDate(endClock);
+      let dayDateLabel = null;
+      if (currentDayDate !== state.lastLoggedDate) {
+        dayDateLabel = currentDayDate;
+        state.lastLoggedDate = currentDayDate;
+      }
+
       const newSession = {
         index: state.sessions.length + 1,
         label: 'Break',
         duration: formatDuration(sessionMs),
-        timeRange: formatTimeRange12Hr(startClock, endClock)
+        timeRange: formatTimeRange12Hr(startClock, endClock),
+        dayDate: dayDateLabel
       };
 
       state.sessions.push(newSession);
@@ -691,6 +731,7 @@
         lastFlagTotalMs: 0,
         currentSessionStartClock: null,
         summedSeconds: 0,
+        lastLoggedDate: null,
         sessions: []
       };
       updateControlIcons();
