@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,8 +18,8 @@
     @font-face {
       font-family: 'DSEG7-Classic';
       src: url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Italic.woff2') format('woff2'),
-           url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Italic.woff') format('woff'),
-           url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Italic.ttf') format('truetype');
+        url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Italic.woff') format('woff'),
+        url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Italic.ttf') format('truetype');
       font-weight: normal;
       font-style: italic;
     }
@@ -26,8 +27,8 @@
     @font-face {
       font-family: 'DSEG7-Classic';
       src: url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff2') format('woff2'),
-           url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff') format('woff'),
-           url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.ttf') format('truetype');
+        url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff') format('woff'),
+        url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
     }
@@ -98,6 +99,8 @@
       align-items: flex-start;
       margin-top: 10px;
       padding-left: 4px;
+      width: 100%;
+      position: relative;
     }
 
     .date-display {
@@ -123,7 +126,7 @@
       color: #6e6e73;
     }
 
-    /* Position 1: Updated Sum Display & Dim Hover-Only 'C' Clear Button */
+    /* Position 1: Updated Sum Display & Dim Hover-Only 'C' / 'R' Buttons */
     .sum-row {
       display: inline-flex;
       align-items: center;
@@ -149,7 +152,8 @@
       transition: opacity 0.15s ease, color 0.15s ease;
     }
 
-    .sum-row:hover .clear-sum-btn {
+    .sum-row:hover .clear-sum-btn,
+    .ratio-boxes-container:hover .clear-sum-btn {
       opacity: 1;
     }
 
@@ -164,6 +168,63 @@
       font-weight: 400;
       letter-spacing: 0.5px;
       line-height: 1;
+    }
+
+    /* Box 1, Box 2, and Box 3 Ratio Container */
+    .ratio-boxes-container {
+      position: absolute;
+      right: 0;
+      top: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .ratio-box {
+      width: 148px;
+      height: 34px;
+      border: 1px solid #3a3a3c;
+      border-radius: 7px;
+      background-color: #000000;
+      color: #e2f2a7;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.5px;
+    }
+
+    .ratio-bottom-row {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ratio-box-small {
+      min-width: 48px;
+      height: 26px;
+      padding: 0 8px;
+      border: 1px solid #3a3a3c;
+      border-radius: 5px;
+      background-color: #000000;
+      color: #e2f2a7;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #clear-boxes-btn {
+      position: absolute;
+      left: -24px;
     }
 
     /* Play/Pause & Flag Controls */
@@ -359,18 +420,27 @@
         margin-left: 0;
         margin-bottom: 12px;
       }
+
+      .ratio-boxes-container {
+        position: static;
+        margin-top: 12px;
+      }
+
       .session-row {
         flex-wrap: wrap;
         justify-content: flex-start;
         gap: 8px;
       }
+
       .session-pill {
         width: calc(100% - 34px);
       }
+
       .session-time-range {
         padding-left: 34px;
         font-size: 1.1rem;
       }
+
       .session-day-date {
         position: static;
         margin-left: 14px;
@@ -379,6 +449,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="app-container">
     <!-- Timer Block -->
@@ -389,14 +460,25 @@
       <!-- Position 3: Current Session Counter (Resets to 00:00:00 on Flag) -->
       <div id="main-timer" class="main-timer">00:00:00</div>
 
-      <!-- Date, Dim Reset Button & Position 1 Sum Display -->
+      <!-- Date, Dim Reset Button, Position 1 Sum Display & Ratio Boxes -->
       <div class="meta-row">
         <div id="date-display" class="date-display">19-10-26 mon</div>
         <button id="reset-btn" class="reset-btn" type="button">reset</button>
-        <!-- Position 1: Updated Sum Display with Hover-Only 'C' Button -->
+        <!-- Position 1: Updated Sum Display with Hover-Only 'C' & 'R' Buttons -->
         <div class="sum-row">
           <button id="clear-sum-btn" class="clear-sum-btn" type="button" title="Clear sum">C</button>
           <span id="sum-display" class="sum-display">0</span>
+          <button id="copy-sum-btn" class="clear-sum-btn" type="button" title="Copy sum">R</button>
+        </div>
+
+        <!-- Box 1, Box 2, and Box 3 with Independent 'C' Button -->
+        <div class="ratio-boxes-container">
+          <div id="ratio-box-1" class="ratio-box"></div>
+          <div id="ratio-box-2" class="ratio-box"></div>
+          <div class="ratio-bottom-row">
+            <button id="clear-boxes-btn" class="clear-sum-btn" type="button" title="Clear boxes">C</button>
+            <div id="ratio-box-3" class="ratio-box-small"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -413,7 +495,8 @@
       </button>
 
       <button id="flag-btn" class="control-btn" type="button" aria-label="Flag Session">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="fill: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="fill: none;">
           <path d="M5 21V4l13 5-13 5"></path>
         </svg>
       </button>
@@ -435,7 +518,12 @@
     const flagBtn = document.getElementById('flag-btn');
     const resetBtn = document.getElementById('reset-btn');
     const clearSumBtn = document.getElementById('clear-sum-btn');
+    const copySumBtn = document.getElementById('copy-sum-btn');
     const sumDisplayEl = document.getElementById('sum-display');
+    const ratioBox1El = document.getElementById('ratio-box-1');
+    const ratioBox2El = document.getElementById('ratio-box-2');
+    const ratioBox3El = document.getElementById('ratio-box-3');
+    const clearBoxesBtn = document.getElementById('clear-boxes-btn');
     const sessionsListEl = document.getElementById('sessions-list');
 
     let state = {
@@ -445,6 +533,9 @@
       lastFlagTotalMs: 0,
       currentSessionStartClock: null,
       summedSeconds: 0,
+      box1Value: '',
+      box2Value: '',
+      box3Value: '',
       lastLoggedDate: null,
       sessions: []
     };
@@ -475,6 +566,13 @@
       } else {
         sumDisplayEl.textContent = formatDuration(state.summedSeconds * 1000);
       }
+    }
+
+    // Update Box 1, Box 2, and Box 3 Displays
+    function updateRatioBoxes() {
+      ratioBox1El.textContent = state.box1Value || '';
+      ratioBox2El.textContent = state.box2Value || '';
+      ratioBox3El.textContent = state.box3Value || '';
     }
 
     // Format current date as DD-MM-YY ddd (e.g., 19-10-26 mon)
@@ -560,6 +658,9 @@
             lastFlagTotalMs: Number(parsed.lastFlagTotalMs) || 0,
             currentSessionStartClock: parsed.currentSessionStartClock ? Number(parsed.currentSessionStartClock) : null,
             summedSeconds: Number(parsed.summedSeconds) || 0,
+            box1Value: parsed.box1Value || '',
+            box2Value: parsed.box2Value || '',
+            box3Value: parsed.box3Value || '',
             lastLoggedDate: parsed.lastLoggedDate || null,
             sessions: Array.isArray(parsed.sessions) ? parsed.sessions : []
           };
@@ -664,6 +765,43 @@
       saveState();
     });
 
+    // Copy Sum ('R') Button Handler (1st click -> Box 2, 2nd click -> Box 1, ignore further clicks)
+    copySumBtn.addEventListener('click', () => {
+      const currentSumText = sumDisplayEl.textContent;
+      if (!state.box2Value) {
+        state.box2Value = currentSumText;
+      } else if (!state.box1Value) {
+        state.box1Value = currentSumText;
+      } else {
+        return;
+      }
+      updateRatioBoxes();
+      saveState();
+    });
+
+    // Box 3 Click Handler (Calculates Box 1 / Box 2 as a rounded whole number)
+    ratioBox3El.addEventListener('click', () => {
+      if (!state.box1Value || !state.box2Value) return;
+      const sec1 = state.box1Value === '0' ? 0 : parseDurationToSeconds(state.box1Value);
+      const sec2 = state.box2Value === '0' ? 0 : parseDurationToSeconds(state.box2Value);
+      if (sec2 > 0) {
+        state.box3Value = String(Math.round(sec1 / sec2));
+      } else {
+        state.box3Value = '0';
+      }
+      updateRatioBoxes();
+      saveState();
+    });
+
+    // Independent Clear Boxes ('C') Button Handler
+    clearBoxesBtn.addEventListener('click', () => {
+      state.box1Value = '';
+      state.box2Value = '';
+      state.box3Value = '';
+      updateRatioBoxes();
+      saveState();
+    });
+
     // Play / Pause Handler
     toggleBtn.addEventListener('click', () => {
       const now = Date.now();
@@ -731,12 +869,16 @@
         lastFlagTotalMs: 0,
         currentSessionStartClock: null,
         summedSeconds: 0,
+        box1Value: '',
+        box2Value: '',
+        box3Value: '',
         lastLoggedDate: null,
         sessions: []
       };
       updateControlIcons();
       updateTimerDisplays();
       updateSumDisplay();
+      updateRatioBoxes();
       renderSessions();
       saveState();
     });
@@ -747,6 +889,7 @@
     updateControlIcons();
     updateTimerDisplays();
     updateSumDisplay();
+    updateRatioBoxes();
     renderSessions();
 
     // High-frequency tick for accurate display updates
@@ -765,4 +908,5 @@
     }
   </script>
 </body>
+
 </html>
