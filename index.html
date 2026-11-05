@@ -294,7 +294,7 @@
       background: transparent;
       border: none;
       color: #cccccc;
-      opacity: 0.35;
+      opacity: 0;
       width: 18px;
       height: 12px;
       display: flex;
@@ -305,7 +305,11 @@
       transition: opacity 0.15s ease, transform 0.08s ease;
     }
 
-    .box-add-btn:hover {
+    .session-row:hover .box-add-btn {
+      opacity: 0.35;
+    }
+
+    .session-row:hover .box-add-btn:hover {
       opacity: 0.75;
     }
 
