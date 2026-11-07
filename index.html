@@ -595,19 +595,19 @@
       return parts[0] * 3600 + parts[1] * 60 + parts[2];
     }
 
-    // Update Position 1 Sum Display (Default '0' when 0, otherwise HH:MM:SS)
+    // Update Position 1 Sum Display (Default '0' when 0, otherwise HH:MM:00)
     function updateSumDisplay() {
       if (!state.summedSeconds || state.summedSeconds <= 0) {
         sumDisplayEl.textContent = '0';
       } else {
-        sumDisplayEl.textContent = formatDuration(state.summedSeconds * 1000);
+        sumDisplayEl.textContent = formatDuration(state.summedSeconds * 1000).replace(/:\d{2}$/, ':00');
       }
     }
 
     // Update Box 1, Box 2, and Box 3 Displays
     function updateRatioBoxes() {
-      ratioBox1El.textContent = state.box1Value || '';
-      ratioBox2El.textContent = state.box2Value || '';
+      ratioBox1El.textContent = (state.box1Value || '').replace(/:\d{2}$/, ':00');
+      ratioBox2El.textContent = (state.box2Value || '').replace(/:\d{2}$/, ':00');
       ratioBox3El.textContent = state.box3Value || '';
     }
 
@@ -815,7 +815,7 @@
 
         const durationEl = document.createElement('div');
         durationEl.className = 'session-duration';
-        durationEl.textContent = session.duration;
+        durationEl.textContent = session.duration.replace(/:\d{2}$/, ':00');
 
         pill.appendChild(left);
         pill.appendChild(durationEl);
